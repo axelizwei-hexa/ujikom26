@@ -1,22 +1,17 @@
-// Firebase Configuration
-// Project: monitoring-92e1e
-// PENTING: Jangan commit file ini ke repository publik.
-// Gunakan Firebase Security Rules untuk membatasi akses data.
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCzBDdHWLMkWN7bH3oJBdri6s5KRBM6EHk",
-  authDomain: "monitoring-iot-29ac6.firebaseapp.com",
-  databaseURL: "https://monitoring-iot-29ac6-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "monitoring-iot-29ac6",
-  storageBucket: "monitoring-iot-29ac6.firebasestorage.app",
-  messagingSenderId: "4724063661",
-  appId: "1:4724063661:web:0a03e34b61072f9fd97524",
-  measurementId: "G-2Y44SR9LMN"
-};
+  apiKey: "AIzaSyDnKA1lBYAgLIH0Mc-m9tVCWM9yKEMGJYw",
+  authDomain: "ujikom-iot-2026.firebaseapp.com",
+  databaseURL: "https://ujikom-iot-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ujikom-iot-2026",
+  storageBucket: "ujikom-iot-2026.firebasestorage.app",
+  messagingSenderId: "571689415299",
+  appId: "1:571689415299:web:288b97d8f60999ddf821b6",
+  measurementId: "G-5YV36S1DDL"
+}; // ← tambahkan ini
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
