@@ -163,11 +163,13 @@ a {
   font-size: 4rem;
   line-height: 1.1;
   margin-bottom: 25px;
+  word-break: break-word;
 }
 
 .gradient-text {
   background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-  -background-clip: text;
+  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

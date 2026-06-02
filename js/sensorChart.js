@@ -6,8 +6,8 @@ window.renderChart = function (chartData) {
   if (!ctx) return;
 
   const labels = chartData?.labels || ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
-  const suhu = chartData?.suhu || [26, 26.5, 27, 27.8, 28.2, 28, 27.5, 27];
-  const kelembapan = chartData?.kelembapan || [70, 72, 71, 68, 65, 67, 69, 71];
+  const lampu = chartData?.lampu || [1, 1, 0, 1, 1, 0, 1, 1];
+  const kipas = chartData?.kipas || [0, 1, 1, 0, 0, 1, 1, 0];
 
   if (window.__chartInstance) window.__chartInstance.destroy();
 
@@ -17,8 +17,8 @@ window.renderChart = function (chartData) {
       labels,
       datasets: [
         {
-          label: 'Suhu (°C)',
-          data: suhu,
+          label: 'Lampu (ON=1 / OFF=0)',
+          data: lampu,
           borderColor: '#4f46e5',
           backgroundColor: 'rgba(79,70,229,.12)',
           fill: true,
@@ -28,8 +28,8 @@ window.renderChart = function (chartData) {
           pointHoverRadius: 6
         },
         {
-          label: 'Kelembapan (%)',
-          data: kelembapan,
+          label: 'Kipas (ON=1 / OFF=0)',
+          data: kipas,
           borderColor: '#06b6d4',
           backgroundColor: 'rgba(6,182,212,.10)',
           fill: true,

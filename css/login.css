@@ -1,3 +1,13 @@
+:root {
+  --text: #111827;
+  --text-soft: #6b7280;
+  --border: #d1d5db;
+  --primary: #4338ca;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --gradient: linear-gradient(135deg, #4338ca, #0ea5e9);
+}
+
 .login-body {
   min-height: 100vh;
   display: grid;
@@ -13,6 +23,7 @@
   width: 100%; max-width: 980px;
   display: grid; grid-template-columns: 1fr 1fr;
   background: #fff;
+  color: var(--text);
   border-radius: 22px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0,0,0,.45);
@@ -74,7 +85,7 @@
   width: 100%;
 }
 .login-form .input-wrapper input {
-  padding-right: 42px; /* Beri ruang agar teks sandi tidak menimpa ikon mata */
+  padding-right: 42px!important; /* Beri ruang agar teks sandi tidak menimpa ikon mata */
 }
 .toggle-pass-btn {
   position: absolute;

@@ -92,17 +92,27 @@
         </div>
       </header>
 
-      <!-- Stats: hanya Suhu & Cahaya -->
-      <section class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <!-- Stats: Lampu, Kipas, Suhu, Cahaya -->
+      <section class="stats-grid">
         <div class="stat-card gradient-1">
-          <small>🌡 Suhu</small>
-          <h2 id="statSuhu">--°C</h2>
-          <span class="trend up" id="trendSuhu">↑ Memuat...</span>
+          <small>💡 Lampu</small>
+          <h2 id="statLampu">--</h2>
+          <span class="trend up" id="trendLampu">Memuat...</span>
         </div>
         <div class="stat-card gradient-4">
-          <small>☀️ Cahaya</small>
-          <h2 id="statCahaya">-- lx</h2>
-          <span class="trend up" id="trendCahaya">↑ Memuat...</span>
+          <small>🍃 Kipas</small>
+          <h2 id="statKipas">--</h2>
+          <span class="trend up" id="trendKipas">Memuat...</span>
+        </div>
+        <div class="stat-card gradient-2">
+          <small>🌡 Suhu</small>
+          <h2 id="statSuhu">--</h2>
+          <span class="trend" id="trendSuhu">Memuat...</span>
+        </div>
+        <div class="stat-card gradient-3">
+          <small>☀ Cahaya</small>
+          <h2 id="statCahaya">--</h2>
+          <span class="trend" id="trendCahaya">Memuat...</span>
         </div>
       </section>
 
@@ -110,7 +120,7 @@
       <section class="dashboard-grid">
         <div class="panel">
           <div class="panel-header">
-            <h3>Grafik Sensor</h3>
+            <h3>Grafik Perangkat</h3>
             <select id="rangeSelect">
               <option>24 Jam Terakhir</option>
               <option>7 Hari</option>
@@ -134,23 +144,38 @@
       </section>
 
       <!-- Relay Control -->
-      <section class="panel">
+      <section class="panel relay-panel">
         <div class="panel-header">
-          <h3>⚡ Kontrol Relay</h3>
-          <span class="muted" style="font-size:0.82rem">Klik toggle untuk nyalakan/matikan perangkat</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:20px;padding:16px 0;">
-          <div style="flex:1">
-            <div style="font-weight:600;font-size:1rem;">Relay 1</div>
-            <div class="muted" style="font-size:0.83rem;margin-top:2px;">Perangkat / Lampu</div>
+          <div>
+            <h3>⚡ Kontrol Perangkat</h3>
+            <small>Klik toggle untuk mengendalikan Lampu dan Kipas</small>
           </div>
-          <span id="relayLabel" style="font-size:0.9rem;color:var(--muted);min-width:40px;">OFF</span>
-          <label class="relay-switch" title="Toggle Relay 1">
-            <input type="checkbox" id="relayToggle" />
+        </div>
+        <div class="relay-row">
+          <div class="relay-info">
+            <strong>Lampu</strong>
+            <div class="muted">Kontrol penerangan</div>
+          </div>
+          <span id="lampLabel" class="relay-label">OFF</span>
+          <label class="relay-switch" title="Toggle Lampu">
+            <input type="checkbox" id="lampToggle" />
             <span class="relay-slider"></span>
           </label>
         </div>
-        <div id="relayStatus" style="font-size:0.82rem;color:var(--muted);padding-bottom:4px;">Status: Memuat...</div>
+        <div id="lampStatus" class="relay-status">Status: Memuat...</div>
+
+        <div class="relay-row">
+          <div class="relay-info">
+            <strong>Kipas</strong>
+            <div class="muted">Kontrol sirkulasi udara</div>
+          </div>
+          <span id="kipasLabel" class="relay-label">OFF</span>
+          <label class="relay-switch" title="Toggle Kipas">
+            <input type="checkbox" id="kipasToggle" />
+            <span class="relay-slider"></span>
+          </label>
+        </div>
+        <div id="kipasStatus" class="relay-status">Status: Memuat...</div>
       </section>
 
       <!-- Tabel Data -->
