@@ -21,7 +21,7 @@ if (form) {
       await signInWithEmailAndPassword(auth, email, password);
       message.textContent = 'Berhasil masuk! Mengalihkan...';
       message.className = 'form-message success';
-      setTimeout(() => (window.location.href = 'dashbord.html'), 800);
+      setTimeout(() => (window.location.href = 'dashboard.html'), 800);
     } catch (err) {
       message.textContent = 'Email atau password salah.';
       message.className = 'form-message error';
@@ -30,7 +30,6 @@ if (form) {
   });
 }
 
-// Auto redirect jika sudah login
 onAuthStateChanged(auth, (user) => {
   if (user && window.location.pathname.endsWith('login.html')) {
     window.location.href = 'dashboard.html';
@@ -42,7 +41,6 @@ export async function logout() {
   window.location.href = 'login.html';
 }
 
-// Toggle show/hide password di form login
 window.togglePassword = function () {
   const pass = document.getElementById('password');
   const btn = document.querySelector('.toggle-pass-btn');
