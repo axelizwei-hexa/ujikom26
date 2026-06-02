@@ -74,7 +74,7 @@
   width: 100%;
 }
 .login-form .input-wrapper input {
-  padding-right: 42px !important; /* Beri ruang agar teks sandi tidak menimpa ikon mata */
+  padding-right: 42px; /* Beri ruang agar teks sandi tidak menimpa ikon mata */
 }
 .toggle-pass-btn {
   position: absolute;
