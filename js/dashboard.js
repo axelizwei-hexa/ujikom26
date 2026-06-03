@@ -7,8 +7,7 @@ import { ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12
 // ====================================
 
 const relayState = {
-  Lampu: false,
-  Kipas: false
+  Lampu: false
 };
 
 const sensorState = {
@@ -23,13 +22,6 @@ const relayItems = [
     toggleId: 'lampToggle',
     labelId: 'lampLabel',
     statusId: 'lampStatus'
-  },
-  {
-    name: 'Kipas',
-    dbPath: 'kipas',
-    toggleId: 'kipasToggle',
-    labelId: 'kipasLabel',
-    statusId: 'kipasStatus'
   }
 ];
 
@@ -76,7 +68,7 @@ function updateDeviceStats() {
 function updateTable(rows) {
   const tbody = document.getElementById('dataTable');
   if (!tbody) return;
-  const filtered = rows.filter(r => r.sensor === 'Lampu' || r.sensor === 'Kipas');
+  const filtered = rows.filter(r => r.sensor === 'Lampu');
   tbody.innerHTML = filtered.map(r => `
     <tr>
       <td>${r.waktu}</td>
@@ -92,7 +84,6 @@ async function loadDummy() {
     const res = await fetch('data/dummy.json');
     const data = await res.json();
     relayState.Lampu = data.lampu === 1 || data.lampu === true || data.lampu === '1';
-    relayState.Kipas = data.kipas === 1 || data.kipas === true || data.kipas === '1';
     sensorState.Suhu = data.suhu || 0;
     sensorState.Cahaya = data.cahaya || 0;
     console.log('✅ Dummy data loaded:', { relayState, sensorState });

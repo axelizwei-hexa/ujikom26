@@ -7,7 +7,6 @@ window.renderChart = function (chartData) {
 
   const labels = chartData?.labels || ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
   const lampu = chartData?.lampu || [1, 1, 0, 1, 1, 0, 1, 1];
-  const kipas = chartData?.kipas || [0, 1, 1, 0, 0, 1, 1, 0];
 
   if (window.__chartInstance) window.__chartInstance.destroy();
 
@@ -21,17 +20,6 @@ window.renderChart = function (chartData) {
           data: lampu,
           borderColor: '#4f46e5',
           backgroundColor: 'rgba(79,70,229,.12)',
-          fill: true,
-          tension: .4,
-          borderWidth: 2,
-          pointRadius: 4,
-          pointHoverRadius: 6
-        },
-        {
-          label: 'Kipas (ON=1 / OFF=0)',
-          data: kipas,
-          borderColor: '#06b6d4',
-          backgroundColor: 'rgba(6,182,212,.10)',
           fill: true,
           tension: .4,
           borderWidth: 2,

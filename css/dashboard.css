@@ -372,8 +372,8 @@ canvas{
   position:absolute;
   display:block;
   border-radius:50%;
-  opacity:.12;
-  filter: blur(8px);
+  opacity:.04;
+  filter: blur(6px);
   animation: floatUp 12s linear infinite;
 }
 
@@ -399,28 +399,20 @@ canvas{
 }
 
 .stat-card::after{
+  /* overlay disabled to prevent darkening */
   content:'';
   position:absolute;
   inset:0;
   border-radius:26px;
   pointer-events:none;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04));
-  mix-blend-mode: overlay;
+  background: transparent;
 }
 
 /* glowing accent for active states */
 .stat-card .dot{ box-shadow: 0 6px 18px rgba(0,0,0,0.25), 0 0 24px rgba(255,255,255,0.04) inset; }
 
 /* panel soft rim light */
-.panel::before{
-  content:'';
-  position:absolute;
-  left:12px; right:12px; top:12px; bottom:12px;
-  border-radius:22px;
-  pointer-events:none;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-  z-index:1;
-}
+/* panel rim removed to avoid dark overlay */
 
 /* ensure panel contents sit above decoration */
 .panel > *{ position:relative; z-index:2; }

@@ -1,18 +1,14 @@
 {
   "lampu": 1,
-  "kipas": 0,
   "suhu": 27.4,
   "cahaya": 540,
   "chart": {
     "labels": ["00:00","03:00","06:00","09:00","12:00","15:00","18:00","21:00"],
-    "lampu": [1, 1, 0, 1, 1, 0, 1, 1],
-    "kipas": [0, 1, 1, 0, 0, 1, 1, 0]
+    "lampu": [1, 1, 0, 1, 1, 0, 1, 1]
   },
   "history": [
     { "waktu": "10:32", "sensor": "Lampu", "nilai": "ON", "status": "OK" },
-    { "waktu": "10:30", "sensor": "Kipas", "nilai": "OFF", "status": "OK" },
     { "waktu": "10:28", "sensor": "Lampu", "nilai": "OFF", "status": "OK" },
-    { "waktu": "10:25", "sensor": "Kipas", "nilai": "ON", "status": "OK" },
     { "waktu": "10:20", "sensor": "Lampu", "nilai": "ON", "status": "OK" }
   ]
 }

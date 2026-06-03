@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Firebase Write</title>
+  <style>
+    body { font-family: Poppins, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { color: #333; }
+    .test-btn { 
+      padding: 12px 20px; margin: 10px 5px 10px 0; 
+      border: none; border-radius: 6px; cursor: pointer; font-weight: 600;
+      background: #2563eb; color: white; transition: 0.3s;
+    }
+    .test-btn:hover { background: #1e40af; }
+    .test-btn.warn { background: #f59e0b; }
+    .test-btn.warn:hover { background: #d97706; }
+    .log { 
+      background: #1a1a1a; color: #0f0; padding: 15px; border-radius: 6px; 
+      font-family: monospace; font-size: 13px; margin-top: 20px; 
+      min-height: 200px; overflow-y: auto; border: 1px solid #333;
+    }
+    .log-entry { margin: 5px 0; }
+    .success { color: #10b981; }
+    .error { color: #ef4444; }
+    .info { color: #60a5fa; }
+    .section { margin-top: 25px; padding-top: 20px; border-top: 2px solid #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Test Firebase Connection & Write</h1>
+    
+    <button class="test-btn" onclick="testConnection()">1. Test Koneksi Firebase</button>
+    <button class="test-btn" onclick="testReadLampu()">2. Baca /lampu</button>
+    <button class="test-btn" onclick="testWriteLampu()">3. Tulis /lampu = 1</button>
+    <button class="test-btn" onclick="testWriteLampuOff()">4. Tulis /lampu = 0</button>
+    
+    <div class="section">
+      <button class="test-btn warn" onclick="testWriteHistory()">5. Tulis ke /sensor/history</button>
+      <button class="test-btn warn" onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="log" id="logBox"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnKA1lBYAgLIH0Mc-m9tVCWM9yKEMGJYw",
+      authDomain: "ujikom-iot-2026.firebaseapp.com",
+      databaseURL: "https://ujikom-iot-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "ujikom-iot-2026",
+      storageBucket: "ujikom-iot-2026.firebasestorage.app",
+      messagingSenderId: "571689415299",
+      appId: "1:571689415299:web:288b97d8f60999ddf821b6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    function log(msg, type = 'info') {
+      const logBox = document.getElementById('logBox');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      const time = new Date().toLocaleTimeString();
+      entry.textContent = `[${time}] ${msg}`;
+      logBox.appendChild(entry);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    window.clearLog = () => {
+      document.getElementById('logBox').innerHTML = '';
+    };
+
+    window.testConnection = async () => {
+      log('🔌 Testing Firebase connection...', 'info');
+      try {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            log(`✅ Auth: Signed in as ${user.email}`, 'success');
+          } else {
+            log('⚠️ Auth: No user signed in (using anonymous or fallback)', 'info');
+          }
+        });
+        
+        const testRef = ref(db, '.info/connected');
+        onValue(testRef, (snapshot) => {
+          if (snapshot.val() === true) {
+            log('✅ Database: Connected', 'success');
+          } else {
+            log('❌ Database: Disconnected', 'error');
+          }
+        });
+      } catch (e) {
+        log(`❌ Error: ${e.message}`, 'error');
+      }
+    };
+
+    window.testReadLampu = async () => {
+      log('📖 Reading /lampu...', 'info');
+      try {
+        const lampuRef = ref(db, 'lampu');
+        const snapshot = await get(lampuRef);
+        if (snapshot.exists()) {
+          log(`✅ /lampu = ${snapshot.val()}`, 'success');
+        } else {
+          log('⚠️ /lampu does not exist (first write will create it)', 'info');
+        }
+      } catch (e) {
+        log(`❌ Read error: ${e.code || e.message}`, 'error');
+      }
+    };
+
+    window.testWriteLampu = async () => {
+      log('✍️ Writing /lampu = 1...', 'info');
+      try {
+        const lampuRef = ref(db, 'lampu');
+        await set(lampuRef, 1);
+        log('✅ /lampu set to 1 (SUCCESS)', 'success');
+        setTimeout(testReadLampu, 500);
+      } catch (e) {
+        log(`❌ Write error: ${e.code || e.message}`, 'error');
+        if (e.code === 'permission_denied') {
+          log('🔴 ISSUE: Firebase Rules blocking writes. See instructions below.', 'error');
+        }
+      }
+    };
+
+    window.testWriteLampuOff = async () => {
+      log('✍️ Writing /lampu = 0...', 'info');
+      try {
+        const lampuRef = ref(db, 'lampu');
+        await set(lampuRef, 0);
+        log('✅ /lampu set to 0 (SUCCESS)', 'success');
+        setTimeout(testReadLampu, 500);
+      } catch (e) {
+        log(`❌ Write error: ${e.code || e.message}`, 'error');
+      }
+    };
+
+    window.testWriteHistory = async () => {
+      log('✍️ Writing test entry to /sensor/history...', 'info');
+      try {
+        const histRef = ref(db, 'sensor/history');
+        const now = new Date();
+        await set(histRef, [{
+          waktu: now.toTimeString().split(' ')[0],
+          tanggal: now.toISOString().split('T')[0],
+          sensor: 'Test',
+          nilai: 'TEST',
+          status: 'OK'
+        }]);
+        log('✅ History write success', 'success');
+      } catch (e) {
+        log(`❌ History write error: ${e.code || e.message}`, 'error');
+      }
+    };
+
+    log('Test Firebase Write page loaded. Click buttons to start testing.', 'info');
+  </script>
+</body>
+</html>

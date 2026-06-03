@@ -72,9 +72,9 @@
       </div>
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="active">📊 Dashboard</a>
-        <a href="#">🌡 Sensor</a>
-        <a href="#">📈 Riwayat</a>
-        <a href="#">⚙ Pengaturan</a>
+        <a href="sensor.html">🌡 Sensor</a>
+        <a href="riwayat.html">📈 Riwayat</a>
+        <a href="pengaturan.html">⚙ Pengaturan</a>
         <a href="#" id="logoutBtn" class="logout">↩ Keluar</a>
       </nav>
     </aside>
@@ -98,17 +98,12 @@
         </div>
       </header>
 
-      <!-- Stats: Lampu, Kipas, Suhu, Cahaya -->
+      <!-- Stats: Lampu, Suhu, Cahaya -->
       <section class="stats-grid">
         <div class="stat-card gradient-1">
           <small>💡 Lampu</small>
           <h2 id="statLampu">--</h2>
           <span class="trend up" id="trendLampu">Memuat...</span>
-        </div>
-        <div class="stat-card gradient-4">
-          <small>🍃 Kipas</small>
-          <h2 id="statKipas">--</h2>
-          <span class="trend up" id="trendKipas">Memuat...</span>
         </div>
         <div class="stat-card gradient-2">
           <small>🌡 Suhu</small>
@@ -154,7 +149,7 @@
         <div class="panel-header">
           <div>
             <h3>⚡ Kontrol Perangkat</h3>
-            <small>Klik toggle untuk mengendalikan Lampu dan Kipas</small>
+            <small>Klik toggle untuk mengendalikan Lampu</small>
           </div>
         </div>
         <div class="relay-row">
@@ -169,19 +164,6 @@
           </label>
         </div>
         <div id="lampStatus" class="relay-status">Status: Memuat...</div>
-
-        <div class="relay-row">
-          <div class="relay-info">
-            <strong>Kipas</strong>
-            <div class="muted">Kontrol sirkulasi udara</div>
-          </div>
-          <span id="kipasLabel" class="relay-label">OFF</span>
-          <label class="relay-switch" title="Toggle Kipas">
-            <input type="checkbox" id="kipasToggle" />
-            <span class="relay-slider"></span>
-          </label>
-        </div>
-        <div id="kipasStatus" class="relay-status">Status: Memuat...</div>
       </section>
 
       <!-- Tabel Data -->
