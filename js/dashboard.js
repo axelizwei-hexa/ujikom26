@@ -2,40 +2,9 @@ import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// Auth guard dengan fallback
-let isDevelopment = false;
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    isDevelopment = true;
-    console.warn('Development mode: Menggunakan dummy data');
-    // Load initial data dari dummy
-    loadDummy();
-    // Uncomment di bawah untuk production:
-    // window.location.href = 'login.html';
-  }
-});
-
-document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
-  e.preventDefault();
-  await signOut(auth);
-  window.location.href = 'login.html';
-});
-
-// Load initial dummy data untuk development
-// ini akan di-override jika Firebase data tersedia
-loadDummy();
-
 // ====================================
-// HISTORY DATA — hanya Lampu & Kipas
+// STATE VARIABLES
 // ====================================
-const historyRef = ref(db, 'sensor/history');
-
-onValue(historyRef, (snapshot) => {
-  const rows = snapshot.val() || [];
-  updateTable(rows);
-}, () => {
-  console.warn('History tidak tersedia');
-});
 
 const relayState = {
   Lampu: false,
@@ -63,6 +32,10 @@ const relayItems = [
     statusId: 'kipasStatus'
   }
 ];
+
+// ====================================
+// FUNCTIONS
+// ====================================
 
 function updateDeviceStats() {
   // Update relay states
@@ -114,7 +87,6 @@ function updateTable(rows) {
   `).join('');
 }
 
-// Fallback ke dummy.json
 async function loadDummy() {
   try {
     const res = await fetch('data/dummy.json');
@@ -123,14 +95,67 @@ async function loadDummy() {
     relayState.Kipas = data.kipas === 1 || data.kipas === true || data.kipas === '1';
     sensorState.Suhu = data.suhu || 0;
     sensorState.Cahaya = data.cahaya || 0;
+    console.log('✅ Dummy data loaded:', { relayState, sensorState });
     updateDeviceStats();
     updateTable(data.history || []);
     window.__sensorData = data;
     if (window.renderChart) window.renderChart(data.chart);
   } catch (e) {
-    console.warn('Tidak bisa memuat data dummy:', e);
+    console.warn('❌ Tidak bisa memuat data dummy:', e);
   }
 }
+
+function formatRelayStatus(deviceName, isOn) {
+  return `Status: ${isOn ? '🟢 Menyala' : '🔴 Mati'} — ${deviceName} ${isOn ? 'aktif' : 'non-aktif'}`;
+}
+
+// ====================================
+// AUTH & LOGOUT
+// ====================================
+
+let isDevelopment = false;
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    isDevelopment = true;
+    console.warn('Development mode: Menggunakan dummy data');
+    // Uncomment di bawah untuk production:
+    // window.location.href = 'login.html';
+  }
+});
+
+document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await signOut(auth);
+  window.location.href = 'login.html';
+});
+
+// ====================================
+// INITIAL DATA LOAD
+// ====================================
+
+// Load initial dummy data
+loadDummy();
+
+// ====================================
+// HISTORY DATA LISTENER
+// ====================================
+
+const historyRef = ref(db, 'sensor/history');
+let historyUnsub = null;
+historyUnsub = onValue(historyRef, (snapshot) => {
+  const rows = snapshot.val() || [];
+  updateTable(rows);
+}, (err) => {
+  console.warn('History tidak tersedia, gunakan dummy data', err);
+  // fallback ke dummy jika realtime history tidak dapat diakses
+  loadDummy();
+  // jika error terkait permission atau jaringan, hentikan listener
+  const isPermission = err && (err.code === 'permission_denied' || String(err).includes('permission_denied'));
+  if (isPermission && typeof historyUnsub === 'function') {
+    historyUnsub();
+    console.warn('History listener detached due to permission issues');
+  }
+});
 
 // ====================================
 // SENSOR DATA LISTENERS (Suhu & Cahaya)
@@ -138,25 +163,45 @@ async function loadDummy() {
 
 // Suhu listener
 const suhuRef = ref(db, 'suhu');
-onValue(suhuRef, (snapshot) => {
+let suhuUnsub = null;
+suhuUnsub = onValue(suhuRef, (snapshot) => {
   sensorState.Suhu = snapshot.val() || 0;
+  console.log('🌡 Suhu updated:', sensorState.Suhu);
   updateDeviceStats();
-}, () => console.warn('Suhu data tidak tersedia, gunakan dummy'));
+}, (err) => {
+  console.warn('Suhu data tidak tersedia', err);
+  const dummy = window.__sensorData || {};
+  sensorState.Suhu = dummy.suhu || sensorState.Suhu;
+  updateDeviceStats();
+  const isPermission = err && (err.code === 'permission_denied' || String(err).includes('permission_denied'));
+  if (isPermission && typeof suhuUnsub === 'function') {
+    suhuUnsub();
+    console.warn('Suhu listener detached due to permission issues');
+  }
+});
 
 // Cahaya listener
 const cahayaRef = ref(db, 'cahaya');
-onValue(cahayaRef, (snapshot) => {
+let cahayaUnsub = null;
+cahayaUnsub = onValue(cahayaRef, (snapshot) => {
   sensorState.Cahaya = snapshot.val() || 0;
+  console.log('☀ Cahaya updated:', sensorState.Cahaya);
   updateDeviceStats();
-}, () => console.warn('Cahaya data tidak tersedia, gunakan dummy'));
+}, (err) => {
+  console.warn('Cahaya data tidak tersedia', err);
+  const dummy = window.__sensorData || {};
+  sensorState.Cahaya = dummy.cahaya || sensorState.Cahaya;
+  updateDeviceStats();
+  const isPermission = err && (err.code === 'permission_denied' || String(err).includes('permission_denied'));
+  if (isPermission && typeof cahayaUnsub === 'function') {
+    cahayaUnsub();
+    console.warn('Cahaya listener detached due to permission issues');
+  }
+});
 
 // ====================================
 // RELAY CONTROL
 // ====================================
-
-function formatRelayStatus(deviceName, isOn) {
-  return `Status: ${isOn ? '🟢 Menyala' : '🔴 Mati'} — ${deviceName} ${isOn ? 'aktif' : 'non-aktif'}`;
-}
 
 relayItems.forEach((item) => {
   const itemRef = ref(db, item.dbPath);
@@ -178,7 +223,18 @@ relayItems.forEach((item) => {
     if (statusEl) statusEl.textContent = formatRelayStatus(item.name, isOn);
   }, (err) => {
     console.error(`Gagal membaca status ${item.name}:`, err);
-    if (statusEl) statusEl.textContent = `Status: Tidak dapat memuat ${item.name}`;
+    // Jika permission_denied atau jaringan, gunakan dummy/fallback
+    const isPermission = err && (err.code === 'permission_denied' || String(err).includes('permission_denied'));
+    if (isPermission) {
+      const dummy = window.__sensorData || {};
+      const fallback = dummy[item.dbPath];
+      const isOn = fallback === 1 || fallback === true || fallback === '1' || false;
+      relayState[item.name] = isOn;
+      updateDeviceStats();
+      if (statusEl) statusEl.textContent = `Status: Akses tertolak — menampilkan data lokal`;
+    } else {
+      if (statusEl) statusEl.textContent = `Status: Tidak dapat memuat ${item.name}`;
+    }
   });
 
   if (toggleEl) {

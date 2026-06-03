@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Open index.html in Chrome",
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "file": "${workspaceFolder}/index.html",
             "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",

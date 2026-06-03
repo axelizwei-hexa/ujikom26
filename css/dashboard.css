@@ -358,3 +358,172 @@ canvas{
     gap:15px;
   }
 }
+
+/* =============== DECORATIONS =============== */
+.decor-bubbles{
+  position:absolute;
+  inset:0; /* cover the main area */
+  pointer-events:none;
+  overflow:hidden;
+  z-index:5;
+}
+
+.decor-bubbles span{
+  position:absolute;
+  display:block;
+  border-radius:50%;
+  opacity:.12;
+  filter: blur(8px);
+  animation: floatUp 12s linear infinite;
+}
+
+.decor-bubbles span.xs{ width:40px; height:40px; }
+.decor-bubbles span.sm{ width:70px; height:70px; }
+.decor-bubbles span.md{ width:110px; height:110px; }
+.decor-bubbles span.lg{ width:180px; height:180px; }
+
+.decor-bubbles span.c1{ background: linear-gradient(135deg,#00d2ff,#3a7bd5); }
+.decor-bubbles span.c2{ background: linear-gradient(135deg,#10b981,#059669); }
+.decor-bubbles span.c3{ background: linear-gradient(135deg,#f59e0b,#d97706); }
+
+@keyframes floatUp{
+  0%{ transform: translateY(40vh) scale(.8); opacity:.08; }
+  50%{ opacity:.14; }
+  100%{ transform: translateY(-20vh) scale(1.05); opacity:0; }
+}
+
+/* subtle highlight for stat cards */
+.stat-card{
+  position:relative;
+  overflow:visible;
+}
+
+.stat-card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04));
+  mix-blend-mode: overlay;
+}
+
+/* glowing accent for active states */
+.stat-card .dot{ box-shadow: 0 6px 18px rgba(0,0,0,0.25), 0 0 24px rgba(255,255,255,0.04) inset; }
+
+/* panel soft rim light */
+.panel::before{
+  content:'';
+  position:absolute;
+  left:12px; right:12px; top:12px; bottom:12px;
+  border-radius:22px;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  z-index:1;
+}
+
+/* ensure panel contents sit above decoration */
+.panel > *{ position:relative; z-index:2; }
+
+/* floating icon for topbar */
+.floating-icon{
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  display:inline-grid;
+  place-items:center;
+  background: linear-gradient(135deg,#00d2ff22,#3a7bd522);
+  box-shadow: 0 8px 30px rgba(0,210,255,0.06);
+  animation: bob 4s ease-in-out infinite;
+}
+
+@keyframes bob{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+}
+
+
+/* =============== DECORATIONS =============== */
+.decor-bubbles{
+  position:absolute;
+  inset:0; /* cover the main area */
+  pointer-events:none;
+  overflow:hidden;
+  z-index:5;
+}
+
+.decor-bubbles span{
+  position:absolute;
+  display:block;
+  border-radius:50%;
+  opacity:.12;
+  filter: blur(8px);
+  animation: floatUp 12s linear infinite;
+}
+
+.decor-bubbles span.xs{ width:40px; height:40px; }
+.decor-bubbles span.sm{ width:70px; height:70px; }
+.decor-bubbles span.md{ width:110px; height:110px; }
+.decor-bubbles span.lg{ width:180px; height:180px; }
+
+.decor-bubbles span.c1{ background: linear-gradient(135deg,#00d2ff,#3a7bd5); }
+.decor-bubbles span.c2{ background: linear-gradient(135deg,#10b981,#059669); }
+.decor-bubbles span.c3{ background: linear-gradient(135deg,#f59e0b,#d97706); }
+
+@keyframes floatUp{
+  0%{ transform: translateY(40vh) scale(.8); opacity:.08; }
+  50%{ opacity:.14; }
+  100%{ transform: translateY(-20vh) scale(1.05); opacity:0; }
+}
+
+/* subtle highlight for stat cards */
+.stat-card{
+  position:relative;
+  overflow:visible;
+}
+
+.stat-card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04));
+  mix-blend-mode: overlay;
+}
+
+/* glowing accent for active states */
+.stat-card .dot{ box-shadow: 0 6px 18px rgba(0,0,0,0.25), 0 0 24px rgba(255,255,255,0.04) inset; }
+
+/* panel soft rim light */
+.panel::before{
+  content:'';
+  position:absolute;
+  left:12px; right:12px; top:12px; bottom:12px;
+  border-radius:22px;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  z-index:1;
+}
+
+/* ensure panel contents sit above decoration */
+.panel > *{ position:relative; z-index:2; }
+
+/* floating icon for topbar */
+.floating-icon{
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  display:inline-grid;
+  place-items:center;
+  background: linear-gradient(135deg,#00d2ff22,#3a7bd522);
+  box-shadow: 0 8px 30px rgba(0,210,255,0.06);
+  animation: bob 4s ease-in-out infinite;
+}
+
+@keyframes bob{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+}
